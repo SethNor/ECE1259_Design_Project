@@ -201,7 +201,7 @@ beta = imag(gamma); % phase constant
 wl = 2 * pi / beta; % wavelength
 u_p = w / beta; % propagation velocity
 p_avg = 0; % look at lecture slides
-g_dB = 10 * log10(exp(-2 * alpha * l)); % gain attenuation in dB
+G_dB = 10 * log10(exp(-2 * alpha * l)); % gain attenuation in dB
 reflect = (z_l - z_0) / (z_l + z_0); % reflection coefficient
 z_in = z_0 * (z_l + z_0 * tanh(gamma * l)) / (z_0 + z_l * tanh(gamma * l)); % input impedance
 v_in = 3 * (z_in / (z_in + z_s)); % input voltage - need z_s? 
@@ -239,7 +239,7 @@ disp(['Reflection coefficient = ', num2str(reflect)])
 disp(['Z_in = ', num2str(z_in), ' Ohms'])
 disp(['V_in = ', num2str(v_in), ' V'])
 disp(['V_L = ', num2str(v_l), ' V'])
-disp(['G_db = ', num2str(G_db), ' dB'])
+disp(['G_db = ', num2str(G_dB), ' dB'])
 
 %% load check - I dont think you can do much without a load
 msg_load_check = "Do you plan to connect a load?"; % ask the user if there is a load 
