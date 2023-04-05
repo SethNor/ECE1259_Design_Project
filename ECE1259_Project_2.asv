@@ -21,9 +21,11 @@ c = 3e8; % speed of light in m/s
 sigma_d = 0;
 sigma_c = 0;
 e_r = 0;
-u_r = 1;
+u_r = 0;
 Ebr = 0;
 tan_d = 0;
+z_l = 0;
+z_s = 0;
 
 %% inputs
 %Listed conductors with sigma_c
@@ -337,15 +339,11 @@ end
 fprintf('----------------------------------------------------\n\n')
 a = input('Please enter a value for the inner radius in mm: ');
 b = input('Please enter a value for the outer radius in mm: ');
-if b <= a
-    disp('Error, outer radius must be bigger than the inner radius.')
-    return
-end 
 f = input('Please enter a value for the operating frequency in Hz: ');
-z_l = input('Please enter a value for the load impedance in Ohms: ');
-z_s = 0; % source impedance is assumed to be 0
+
+%% need to do frequency response 
 l = input('Please enter the length in m: ');
-v_s = input('Please enter the operating voltage in V: ');
+v = input('Please enter the operating voltage in V: '); % IS IT USUAL TO KNOW THIS
 fprintf('----------------------------------------------------\n\n')
 
 %% lossy or lossless system
@@ -359,7 +357,7 @@ if choice_loss == 1 % system is LOSSY
     check_lossy = input('Is this correct? [Y or N]: ', 's'); % confirm with user of choice
 
     if check_lossy == "y" || check_lossy == "Y"
-        % load check
+        % load check - I dont think you can do much without a load
         msg_load_check = "Do you plan to connect a load?"; % ask the user if there is a load 
         opts_load_check = ["Yes" "No"]; % options
         choice_load_check = menu(msg_load_check, opts_load_check); % create interactive menu
@@ -376,16 +374,18 @@ if choice_loss == 1 % system is LOSSY
                 C = 2 * pi * e_r * e_0 / log(b / a); % capacitance
                 L = u_r * u_0 * log(b / a) / (2 * pi); % inductance
                 R = (1 / (2 * pi)) * ((1 / a) +(1 / b)) * sqrt(pi * f * u_0 / sigma_c); % resistance
+                u_r = C / sqrt(e_r);
                 gamma = sqrt((R + j * w * L) * (G + j * w * C)); % propagation constant
                 z_0 = (R + j * w * L) / gamma; % characteristic impednace 
                 alpha = real(gamma); % attenuation constant
                 beta = imag(gamma); % phase constant
                 wl = 2 * pi / beta; % wavelength
                 u_p = w / beta; % propagation velocity
+                % p_avg = 0; % look at lecture slides
                 G_dB = 10 * log10(exp(-2 * alpha * l)); % gain attenuation in dB
                 reflect = (z_l - z_0) / (z_l + z_0); % reflection coefficient
                 z_in = z_0 * (z_l + z_0 * tanh(gamma * l)) / (z_0 + z_l * tanh(gamma * l)); % input impedance
-                v_in = v_s * (z_in / (z_in + z_s)); % input voltage
+                v_in = 3 * (z_in / (z_in + z_s)); % input voltage - need z_s? 
                 v_0p = v_in / (exp(gamma * l) + reflect*exp(-gamma * l)); % received voltage 
                 v_0n = reflect * v_0p; % reflected voltage
                 v_l = v_0p + v_0n; % load voltage
@@ -395,13 +395,11 @@ if choice_loss == 1 % system is LOSSY
                 disp(['alpha = ', num2str(alpha), ' Np/m'])
                 disp(['beta = ', num2str(beta), ' rad/m'])
                 disp(['Z_0 = ', num2str(z_0), ' Ohms'])
-                disp(['VSWR = ', num2str(VSWR)])
-                disp(['G_db = ', num2str(G_dB), ' dB'])
+                disp(['Reflection coefficient = ', num2str(reflect)])
                 disp(['Z_in = ', num2str(z_in), ' Ohms'])
                 disp(['V_in = ', num2str(v_in), ' V'])
                 disp(['V_L = ', num2str(v_l), ' V'])
                 disp(['G_db = ', num2str(G_dB), ' dB'])
-
             else
                 disp('You will have to restart the program.');
                 return;
@@ -421,22 +419,25 @@ if choice_loss == 1 % system is LOSSY
                 C = 2 * pi * e_r * e_0 / log(b / a); % capacitance
                 L = u_r * u_0 * log(b / a) / (2 * pi); % inductance
                 R = (1 / (2 * pi)) * ((1 / a) +(1 / b)) * sqrt(pi * f * u_0 / sigma_c); % resistance
+                u_r = C / sqrt(e_r);
                 gamma = sqrt((R + j * w * L) * (G + j * w * C)); % propagation constant
                 z_0 = (R + j * w * L) / gamma; % characteristic impednace 
                 alpha = real(gamma); % attenuation constant
                 beta = imag(gamma); % phase constant
                 wl = 2 * pi / beta; % wavelength
                 u_p = w / beta; % propagation velocity
+                % p_avg = 0; % look at lecture slides
                 G_dB = 10 * log10(exp(-2 * alpha * l)); % gain attenuation in dB
 
                 % display
                 disp(['alpha = ', num2str(alpha), ' Np/m'])
                 disp(['beta = ', num2str(beta), ' rad/m'])
                 disp(['Z_0 = ', num2str(z_0), ' Ohms'])
+                disp(['Reflection coefficient = ', num2str(reflect)])
+                disp(['Z_in = ', num2str(z_in), ' Ohms'])
+                disp(['V_in = ', num2str(v_in), ' V'])
+                disp(['V_L = ', num2str(v_l), ' V'])
                 disp(['G_db = ', num2str(G_dB), ' dB'])
-                %display the frequency response
-                sys=tf([C*l 1], [R*C*l 1]);
-                bode(sys)
 
             else
                 disp('You will have to restart the program.');
@@ -473,15 +474,16 @@ if choice_loss == 2 % system is LOSSLESS
                 C = 2 * pi * e_r * e_0 / log(b / a); % capacitance
                 L = u_r * u_0 * log(b / a) / (2 * pi); % inductance
                 R = (1 / (2 * pi)) * ((1 / a) +(1 / b)) * sqrt(pi * f * u_0 / sigma_c); % resistance
+                u_r = C / sqrt(e_r);
                 beta = w * sqrt(L * C); % phase constant
                 gamma = j * beta; % propagation constant
                 z_0 = sqrt(L / C); % characteristic impedance
                 wl = 2 * pi / beta; % wavelength
                 u_p = w / beta; % propagation velocity
-
+                % p_avg = 0; % look at lecture slides
                 reflect = (z_l - z_0) / (z_l + z_0); % reflection coefficient
-                z_in = z_0 * (z_l + j * z_0 * tan(beta * l)) / (z_0 + j * z_l * tan(beta * l)); % input impedance
-                v_in = v_s * (z_in / (z_in + z_s)); % input voltage
+                z_in = z_0 * (z_l + z_0 * tan(beta * l)) / (z_0 + z_l * tan(beta * l)); % input impedance
+                v_in = 3 * (z_in / (z_in + z_s)); % input voltage - need z_s? 
                 v_0p = v_in / (exp(gamma * l) + reflect * exp(-gamma * l)); % received voltage 
                 v_0n = reflect * v_0p; % reflected voltage
                 v_l = v_0p + v_0n; % load voltage
@@ -491,10 +493,11 @@ if choice_loss == 2 % system is LOSSLESS
                 disp(['beta = ', num2str(beta), ' rad/m'])
                 disp(['Z_0 = ', num2str(z_0), ' Ohms'])
                 disp(['Reflection coefficient = ', num2str(reflect)])
-                disp(['VSWR = ', num2str(VSWR)])
                 disp(['Z_in = ', num2str(z_in), ' Ohms'])
                 disp(['V_in = ', num2str(v_in), ' V'])
                 disp(['V_L = ', num2str(v_l), ' V'])
+                disp(['G_db = ', num2str(G_dB), ' dB'])
+                
 
             else
                 disp('You will have to restart the program.');
@@ -515,15 +518,22 @@ if choice_loss == 2 % system is LOSSLESS
                 C = 2 * pi * e_r * e_0 / log(b / a); % capacitance
                 L = u_r * u_0 * log(b / a) / (2 * pi); % inductance
                 R = (1 / (2 * pi)) * ((1 / a) +(1 / b)) * sqrt(pi * f * u_0 / sigma_c); % resistance
+                u_r = C / sqrt(e_r);
                 beta = w * sqrt(L * C); % phase constant
                 gamma = j * beta; % propagation constant
                 z_0 = sqrt(L / C); % characteristic impedance
                 wl = 2 * pi / beta; % wavelength
                 u_p = w / beta; % propagation velocity
+                % p_avg = 0; % look at lecture slides
 
                 % display
                 disp(['beta = ', num2str(beta), ' rad/m'])
                 disp(['Z_0 = ', num2str(z_0), ' Ohms'])
+                disp(['Reflection coefficient = ', num2str(reflect)])
+                disp(['Z_in = ', num2str(z_in), ' Ohms'])
+                disp(['V_in = ', num2str(v_in), ' V'])
+                disp(['V_L = ', num2str(v_l), ' V'])
+                disp(['G_db = ', num2str(G_dB), ' dB'])
 
             else
                 disp('You will have to restart the program.');
