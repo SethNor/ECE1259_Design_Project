@@ -2,7 +2,7 @@
 % This program is to simulate a coax cable design
 
 format long e
-clear
+clear all
 clc
 
 %% opening statements
@@ -61,39 +61,119 @@ Teflon = [2.1, 60e6, 0.0001, 10^-15]; %tand < 0.0002 so I put 0.0001
 Water = [81, 0, 0.04, 10^-4];
 Seawater = [72, 0, 0.9, 5];
 
+%defining checking variable
+correct = 'N';
+
 %creating a menu for the user to give conductor 
 conductor = menu('What conductor are you using?', 'Aluminum', 'Carbon', 'Copper', 'Gold', 'Graphite', 'Iron', 'Lead', 'Nichrome', 'Nickel', 'Silver', 'Solder', 'Stainless Steel', 'Tin', 'Tungsten', 'Other');
 switch conductor
     case 1
         sigma_c = Al;
+        correct=input('You chose Aluminim is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        else
+        end
     case 2
         sigma_c = Car;
+        correct=input('You chose Carbon is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 3
         sigma_c = Cu;
+        correct=input('You chose Copper is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 4
         sigma_c = Au;
+        correct=input('You chose Gold is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 5
         sigma_c = Gr;
+        correct=input('You chose Graphite is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 6
         sigma_c = Fe;
+        correct=input('You chose Iron is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 7
         sigma_c = Pb;
+        correct=input('You chose Lead is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 8
         sigma_c = Nich;
+        correct=input('You chose Nichrome is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 9 
         sigma_c = Ni;
+        correct=input('You chose Nickel is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 10
         sigma_c = Ag;
+        correct=input('You chose Silver is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 11
         sigma_c = Sol;
+        correct=input('You chose Solder is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 12
         sigma_c = Stain;
+        correct=input('You chose Stainless Steel is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 13
         sigma_c = Sn;
+        correct=input('You chose Tin is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 14 
         sigma_c = W;
+        correct=input('You chose Tungsten is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 15
         sigma_c = input('Please enter a value for the conductor permiability in S/m: ');
+        disp('You chose Other with a permiability of ', num2str(sigma_c));
+        correct=input('Is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
 end
 
 %Menu for the dielectric from list or given values.
@@ -104,76 +184,150 @@ switch dielectric
         Ebr = Air(2);
         tan_d = Air(3);
         sigma_d = Air(4);
+        correct=input('You chose Air is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 2
         e_r = Alum(1);
         Ebr = Alum(2);
         tan_d = Alum(3);
-        sigma_d = Alum(4);
+        sigma_d = Alum(4);correct=input('You chose Alumina is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 3
         e_r = Bar(1);
         Ebr = Bar(2);
         tan_d = Bar(3);
         sigma_d = Bar(4);
+        correct=input('You chose Barium Titanate is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 4
         e_r = Glass(1);
         Ebr = Glass(2);
         tan_d = Glass(3);
         sigma_d = Glass(4); 
+        correct=input('You chose Glass is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 5
         e_r = Ice(1);
         Ebr = Ice(2);
         tan_d = Ice(3);
         sigma_d = Ice(4); 
+        correct=input('You chose Ice is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 6
         e_r = Mica(1);
         Ebr = Mica(2);
         tan_d = Mica(3);
         sigma_d = Mica(4); 
+        correct=input('You chose Mica is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 7
         e_r = Poleth(1);
         Ebr = Poleth(2);
         tan_d = Poleth(3);
         sigma_d = Poleth(4); 
+        correct=input('You chose Polyethylene is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 8 
         e_r = Polsty(1);
         Ebr = Polsty(2);
         tan_d = Polsty(3);
-        sigma_d = Polsty(4); 
+        sigma_d = Polsty(4); correct=input('You chose Polystyrene is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 9
         e_r = Quartz(1);
         Ebr = Quartz(2);
         tan_d = Quartz(3);
         sigma_d = Quartz(4); 
+        correct=input('You chose Quartz (fused) is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 10
         e_r = Si(1);
         Ebr = Si(2);
         tan_d = Si(3);
         sigma_d = Si(4); 
+        correct=input('You chose Silicon (pure) is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 11
         e_r = Soil(1);
         Ebr = Soil(2);
         tan_d = Soil(3);
         sigma_d = Soil(4); 
+        correct=input('You chose Soil (dry) is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 12
         e_r = Teflon(1);
         Ebr = Teflon(2);
         tan_d = Teflon(3);
         sigma_d = Teflon(4); 
+        correct=input('You chose Teflon is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 13
         e_r = Water(1);
         Ebr = Water(2);
         tan_d = Water(3);
         sigma_d = Water(4); 
+        correct=input('You chose Water (distilled) is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 14
         e_r = Seawater(1);
         Ebr = Seawater(2);
         tan_d = Seawater(3);
         sigma_d = Seawater(4); 
+        correct=input('You chose Seawater is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
     case 15
         e_r = input('Please enter a value for the relative permitivity of the dielectric: ');
         Ebr = input('Please enter a value for the Electric field breakdown in V/m: ');
         tan_d = input('Please enter a value for the tangent of the dielectric phase at 1MHz: ');
         sigma_d = input('Please enter a value for the permiability of the dielectric in S/m: ');
+        disp('You chose Other with a relative permitivity of ', num2str(e_r), ',\na Electric field breakdown of ',num2str(Ebr), ',\na tangent of the dielectric phase of ', num2str(tan_d), ',\nand a permiability of ', num2str(sigma_d), '.');
+        correct = input('Is this correct? [Y or N]: ','s');
+        if correct ~= 'Y' && correct ~= 'y'
+            disp('You will have to restart the program.');
+            return;
+        end
 end
         
     % somehow make a struct of all the materials to grab data from to find
