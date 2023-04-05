@@ -1,16 +1,15 @@
-% Rick Brophy
 % This program is to simulate a coax cable design
 
 format long e
-clear all
+clear all;
 clc
 
 %% opening statements
-disp('This program is for coxial cable design')
-disp('---------------------------------------')
+disp('This program is for a coxial cable design')
+disp('------------------------------------------')
 disp('ECE1249 Design Project 2')
 disp('Authors: Rick, Seth, Andrew, Kamden')
-fprintf('\n\n')
+fprintf('\n')
 
 %% constants
 h = 6.626e-34; % planks constant in Js
@@ -65,7 +64,10 @@ Seawater = [72, 0, 0.9, 5];
 correct = 'N';
 
 %creating a menu for the user to give conductor 
-conductor = menu('What conductor are you using?', 'Aluminum', 'Carbon', 'Copper', 'Gold', 'Graphite', 'Iron', 'Lead', 'Nichrome', 'Nickel', 'Silver', 'Solder', 'Stainless Steel', 'Tin', 'Tungsten', 'Other');
+conductor = menu('What conductor are you using?', 'Aluminum', 'Carbon', 'Copper', ...
+    'Gold', 'Graphite', 'Iron', 'Lead', 'Nichrome', 'Nickel', 'Silver', 'Solder', ...
+    'Stainless Steel', 'Tin', 'Tungsten', 'Other');
+
 switch conductor
     case 1
         sigma_c = Al;
@@ -176,7 +178,10 @@ switch conductor
 end
 
 %Menu for the dielectric from list or given values.
-dielectric = menu('What dielectric are you using?', 'Air', 'Alumina', 'Barium Titanate', 'Glass', 'Ice', 'Mica', 'Polyethylene', 'Polystyrene', 'Quartz (fused)', 'Silicon (pure)', 'Soil (dry)', 'Teflon', 'Water (distilled)', 'Seawater', 'Other');
+dielectric = menu('What dielectric are you using?', 'Air', 'Alumina', 'Barium Titanate', ...
+    'Glass', 'Ice', 'Mica', 'Polyethylene', 'Polystyrene', 'Quartz (fused)', 'Silicon (pure)', ...
+    'Soil (dry)', 'Teflon', 'Water (distilled)', 'Seawater', 'Other');
+
 switch dielectric
     case 1
         e_r = Air(1);
@@ -321,7 +326,8 @@ switch dielectric
         Ebr = input('Please enter a value for the Electric field breakdown in V/m: ');
         tan_d = input('Please enter a value for the tangent of the dielectric phase at 1MHz: ');
         sigma_d = input('Please enter a value for the permiability of the dielectric in S/m: ');
-        disp('You chose Other with a relative permitivity of ', num2str(e_r), ',\na Electric field breakdown of ',num2str(Ebr), ',\na tangent of the dielectric phase of ', num2str(tan_d), ',\nand a permiability of ', num2str(sigma_d), '.');
+        disp('You chose Other with a relative permitivity of ', num2str(e_r), ',\na Electric field breakdown of ',num2str(Ebr), ...
+            ',\na tangent of the dielectric phase of ', num2str(tan_d), ',\nand a permiability of ', num2str(sigma_d), '.');
         correct = input('Is this correct? [Y or N]: ','s');
         if correct ~= 'Y' && correct ~= 'y'
             disp('You will have to restart the program.');
@@ -329,129 +335,210 @@ switch dielectric
         end
 end
       
-% asks the user to enter several design requirements
+%% asks the user to enter several design requirements
+fprintf('----------------------------------------------------\n\n')
 a = input('Please enter a value for the inner radius in mm: ');
 b = input('Please enter a value for the outer radius in mm: ');
 f = input('Please enter a value for the operating frequency in Hz: ');
-%%need to do frequency response 
+
+%% need to do frequency response 
 l = input('Please enter the length in m: ');
 v = input('Please enter the operating voltage in V: '); % IS IT USUAL TO KNOW THIS
+fprintf('----------------------------------------------------\n\n')
 
-%% outputs - lossy
-w = 2 * pi * f; % angular freq
-j = sqrt(-1); % imaginary number
-G = 2 * pi * sigma_d / log(b / a); % conductance
-C = 2 * pi * e_r * e_0 / log(b / a); % capacitance
-L = u_r * u_0 * log(b / a) / (2 * pi); % inductance
-R = (1 / (2 * pi)) * ((1 / a) +(1 / b)) * sqrt(pi * f * u_0 / sigma_c); % resistance
-u_r = C / sqrt(e_r);
-gamma = sqrt((R + j * w * L) * (G + j * w * C)); % propagation constant
-z_0 = (R + j * w * L) / gamma; % characteristic impednace 
-alpha = real(gamma); % attenuation constant
-beta = imag(gamma); % phase constant
-wl = 2 * pi / beta; % wavelength
-u_p = w / beta; % propagation velocity
-p_avg = 0; % look at lecture slides
-G_dB = 10 * log10(exp(-2 * alpha * l)); % gain attenuation in dB
-reflect = (z_l - z_0) / (z_l + z_0); % reflection coefficient
-z_in = z_0 * (z_l + z_0 * tanh(gamma * l)) / (z_0 + z_l * tanh(gamma * l)); % input impedance
-v_in = 3 * (z_in / (z_in + z_s)); % input voltage - need z_s? 
-v_0p = v_in / (exp(gamma * l) + reflect*exp(-gamma * l)); % received voltage 
-v_0n = reflect * v_0p; % reflected voltage
-v_l = v_0p + v_0n; % load voltage
-VSWR = (1 + abs(reflect)) / (1 - abs(reflect)); % voltage standing wave ratio
-
-%% outputs - lossless
-w = 2 * pi * f; % angular freq
-j = sqrt(-1); % imaginary number
-G = 2 * pi * sigma_d / log(b / a); % conductance
-C = 2 * pi * e_r * e_0 / log(b / a); % capacitance
-L = u_r * u_0 * log(b / a) / (2 * pi); % inductance
-R = (1 / (2 * pi)) * ((1 / a) +(1 / b)) * sqrt(pi * f * u_0 / sigma_c); % resistance
-u_r = C / sqrt(e_r);
-beta = w * sqrt(L * C); % phase constant
-gamma = j * beta; % propagation constant
-z_0 = sqrt(L / C); % characteristic impedance
-wl = 2 * pi / beta; % wavelength
-u_p = w / beta; % propagation velocity
-p_avg = 0; % look at lecture slides
-reflect = (z_l - z_0) / (z_l + z_0); % reflection coefficient
-z_in = z_0 * (z_l + z_0 * tan(beta * l)) / (z_0 + z_l * tan(beta * l)); % input impedance
-v_in = 3 * (z_in / (z_in + z_s)); % input voltage - need z_s? 
-v_0p = v_in / (exp(gamma * l) + reflect * exp(-gamma * l)); % received voltage 
-v_0n = reflect * v_0p; % reflected voltage
-v_l = v_0p + v_0n; % load voltage
-VSWR = (1 + abs(reflect)) / (1 - abs(reflect)); % voltage standing wave ratio
-
-%% Display
-disp(['alpha = ', num2str(alpha), ' Np/m'])
-disp(['beta = ', num2str(beta), ' rad/m'])
-disp(['Z_0 = ', num2str(z_0), ' Ohms'])
-disp(['Reflection coefficient = ', num2str(reflect)])
-disp(['Z_in = ', num2str(z_in), ' Ohms'])
-disp(['V_in = ', num2str(v_in), ' V'])
-disp(['V_L = ', num2str(v_l), ' V'])
-disp(['G_db = ', num2str(G_dB), ' dB'])
-
-%% load check - I dont think you can do much without a load
-msg_load_check = "Do you plan to connect a load?"; % ask the user if there is a load 
-opts_load_check = ["Yes" "No"]; % options
-choice_load_check = menu(msg_load_check, opts_load_check); % create interactive menu
-
-if choice_load_check == 1 % there IS a load 
-    disp('The system now has a load! Is this correct?')
-    check = input('Enter yes or no: ', "s"); % confirm with user of choice
-
-    if check == "yes" || check == "Yes"
-        % complete the rest of the calculations
-
-    else
-        disp('You will have to restart the program.');
-        return;
-       
-    end
-
-end
-
-if choice_load_check == 2 % there ISNT a load 
-    disp('The system does not have a load! Is this correct?')
-    check = input('Enter yes or no: ', "s"); % confirm with user of choice
-
-    if check == "yes" || check == "Yes"
-        % complete the rest of the calculations
-
-    else
-        disp('You will have to restart the program.');
-        return;
-       
-    end
-end
-
-%% lossy vs lossless
+%% lossy or lossless system
 msg_loss = "Is your system lossless or lossy?"; % ask the user if there is loss
 opts_loss = ["Lossy" "Lossless"]; % options
 choice_loss = menu(msg_loss, opts_loss); % create interactive menu
 
-if choice_load_check == 1 % system is LOSSY
-    disp('The system is now lossy! Is this correct?')
-    check = input('Enter yes or no: ', "s"); % confirm with user of choice
+% ***LOSSY LOSSY LOSSY LOSSY LOSSY LOSSY LOSSY***
+if choice_loss == 1 % system is LOSSY
+    disp('The system is now lossy!')
+    check_lossy = input('Is this correct? [Y or N]: ', 's'); % confirm with user of choice
 
-    if check == "yes" || check == "Yes"
-        % complete the rest of the calculations
+    if check_lossy == "y" || check_lossy == "Y"
+        % load check - I dont think you can do much without a load
+        msg_load_check = "Do you plan to connect a load?"; % ask the user if there is a load 
+        opts_load_check = ["Yes" "No"]; % options
+        choice_load_check = menu(msg_load_check, opts_load_check); % create interactive menu
+        
+        if choice_load_check == 1 % there IS a load 
+            fprintf('----------------------------------------------------\n\n')
+            disp('The system has a load!')
+            check_load = input('Is this correct? [Y or N]: ', "s"); % confirm with user of choice
+        
+            if check_load == "y" || check_load == "Y"
+                w = 2 * pi * f; % angular freq
+                j = sqrt(-1); % imaginary number
+                G = 2 * pi * sigma_d / log(b / a); % conductance
+                C = 2 * pi * e_r * e_0 / log(b / a); % capacitance
+                L = u_r * u_0 * log(b / a) / (2 * pi); % inductance
+                R = (1 / (2 * pi)) * ((1 / a) +(1 / b)) * sqrt(pi * f * u_0 / sigma_c); % resistance
+                u_r = C / sqrt(e_r);
+                gamma = sqrt((R + j * w * L) * (G + j * w * C)); % propagation constant
+                z_0 = (R + j * w * L) / gamma; % characteristic impednace 
+                alpha = real(gamma); % attenuation constant
+                beta = imag(gamma); % phase constant
+                wl = 2 * pi / beta; % wavelength
+                u_p = w / beta; % propagation velocity
+                % p_avg = 0; % look at lecture slides
+                G_dB = 10 * log10(exp(-2 * alpha * l)); % gain attenuation in dB
+                reflect = (z_l - z_0) / (z_l + z_0); % reflection coefficient
+                z_in = z_0 * (z_l + z_0 * tanh(gamma * l)) / (z_0 + z_l * tanh(gamma * l)); % input impedance
+                v_in = 3 * (z_in / (z_in + z_s)); % input voltage - need z_s? 
+                v_0p = v_in / (exp(gamma * l) + reflect*exp(-gamma * l)); % received voltage 
+                v_0n = reflect * v_0p; % reflected voltage
+                v_l = v_0p + v_0n; % load voltage
+                VSWR = (1 + abs(reflect)) / (1 - abs(reflect)); % voltage standing wave ratio
+                
+                % display
+                disp(['alpha = ', num2str(alpha), ' Np/m'])
+                disp(['beta = ', num2str(beta), ' rad/m'])
+                disp(['Z_0 = ', num2str(z_0), ' Ohms'])
+                disp(['Reflection coefficient = ', num2str(reflect)])
+                disp(['Z_in = ', num2str(z_in), ' Ohms'])
+                disp(['V_in = ', num2str(v_in), ' V'])
+                disp(['V_L = ', num2str(v_l), ' V'])
+                disp(['G_db = ', num2str(G_dB), ' dB'])
+            else
+                disp('You will have to restart the program.');
+                return;
+               
+            end
+        end
+
+        if choice_load_check == 2 % there ISNT a load 
+            fprintf('----------------------------------------------------\n\n')
+            disp('The system does not have a load!')
+            check_load = input('Is this correct? [Y or N]: ', "s"); % confirm with user of choice
+
+            if check_load == "y" || check_load == "Y"
+                w = 2 * pi * f; % angular freq
+                j = sqrt(-1); % imaginary number
+                G = 2 * pi * sigma_d / log(b / a); % conductance
+                C = 2 * pi * e_r * e_0 / log(b / a); % capacitance
+                L = u_r * u_0 * log(b / a) / (2 * pi); % inductance
+                R = (1 / (2 * pi)) * ((1 / a) +(1 / b)) * sqrt(pi * f * u_0 / sigma_c); % resistance
+                u_r = C / sqrt(e_r);
+                gamma = sqrt((R + j * w * L) * (G + j * w * C)); % propagation constant
+                z_0 = (R + j * w * L) / gamma; % characteristic impednace 
+                alpha = real(gamma); % attenuation constant
+                beta = imag(gamma); % phase constant
+                wl = 2 * pi / beta; % wavelength
+                u_p = w / beta; % propagation velocity
+                % p_avg = 0; % look at lecture slides
+                G_dB = 10 * log10(exp(-2 * alpha * l)); % gain attenuation in dB
+
+                % display
+                disp(['alpha = ', num2str(alpha), ' Np/m'])
+                disp(['beta = ', num2str(beta), ' rad/m'])
+                disp(['Z_0 = ', num2str(z_0), ' Ohms'])
+                disp(['Reflection coefficient = ', num2str(reflect)])
+                disp(['Z_in = ', num2str(z_in), ' Ohms'])
+                disp(['V_in = ', num2str(v_in), ' V'])
+                disp(['V_L = ', num2str(v_l), ' V'])
+                disp(['G_db = ', num2str(G_dB), ' dB'])
+
+            else
+                disp('You will have to restart the program.');
+                return;
+            end
+        end 
 
     else
-        disp('You will have to restart the program.');
-        return;
-       
+    disp('You will have to restart the program.');
+    return;
+   
     end
 end
 
-if choice_load_check == 2 % system is LOSSLESS
-    disp('The system is now lossless! Is this correct?')
-    check = input('Enter yes or no: ', "s"); % confirm with user of choice
+% ***LOSSLESS LOSSLESS LOSSLESS LOSSLESS LOSSLESS***
+if choice_loss == 2 % system is LOSSLESS
+    disp('The system is now lossless!')
+    check_lossless = input('Is this correct? [Y or N]: ', "s"); % confirm with user of choice
 
-    if check == "yes" || check == "Yes"
-        % complete the rest of the calculations
+    if check_lossless == "y" || check_lossless == "Y"
+        msg_load_check = "Do you plan to connect a load?"; % ask the user if there is a load 
+        opts_load_check = ["Yes" "No"]; % options
+        choice_load_check = menu(msg_load_check, opts_load_check); % create interactive menu
+        
+        if choice_load_check == 1 % there IS a load 
+            fprintf('----------------------------------------------------\n\n')
+            disp('The system has a load!')
+            check_load = input('Is this correct? [Y or N]: ', "s"); % confirm with user of choice
+        
+            if check_load == "y" || check_load == "Y"
+                w = 2 * pi * f; % angular freq
+                j = sqrt(-1); % imaginary number
+                G = 2 * pi * sigma_d / log(b / a); % conductance
+                C = 2 * pi * e_r * e_0 / log(b / a); % capacitance
+                L = u_r * u_0 * log(b / a) / (2 * pi); % inductance
+                R = (1 / (2 * pi)) * ((1 / a) +(1 / b)) * sqrt(pi * f * u_0 / sigma_c); % resistance
+                u_r = C / sqrt(e_r);
+                beta = w * sqrt(L * C); % phase constant
+                gamma = j * beta; % propagation constant
+                z_0 = sqrt(L / C); % characteristic impedance
+                wl = 2 * pi / beta; % wavelength
+                u_p = w / beta; % propagation velocity
+                % p_avg = 0; % look at lecture slides
+                reflect = (z_l - z_0) / (z_l + z_0); % reflection coefficient
+                z_in = z_0 * (z_l + z_0 * tan(beta * l)) / (z_0 + z_l * tan(beta * l)); % input impedance
+                v_in = 3 * (z_in / (z_in + z_s)); % input voltage - need z_s? 
+                v_0p = v_in / (exp(gamma * l) + reflect * exp(-gamma * l)); % received voltage 
+                v_0n = reflect * v_0p; % reflected voltage
+                v_l = v_0p + v_0n; % load voltage
+                VSWR = (1 + abs(reflect)) / (1 - abs(reflect)); % voltage standing wave ratio
+
+                % display
+                disp(['beta = ', num2str(beta), ' rad/m'])
+                disp(['Z_0 = ', num2str(z_0), ' Ohms'])
+                disp(['Reflection coefficient = ', num2str(reflect)])
+                disp(['Z_in = ', num2str(z_in), ' Ohms'])
+                disp(['V_in = ', num2str(v_in), ' V'])
+                disp(['V_L = ', num2str(v_l), ' V'])
+                disp(['G_db = ', num2str(G_dB), ' dB'])
+
+            else
+                disp('You will have to restart the program.');
+                return;
+               
+            end
+        end
+
+        if choice_load_check == 2 % there ISNT a load 
+            fprintf('----------------------------------------------------\n\n')
+            disp('The system does not have a load!')
+            check_load = input('Is this correct? [Y or N]: ', "s"); % confirm with user of choice
+
+            if check_load == "y" || check_load == "Y"
+                w = 2 * pi * f; % angular freq
+                j = sqrt(-1); % imaginary number
+                G = 2 * pi * sigma_d / log(b / a); % conductance
+                C = 2 * pi * e_r * e_0 / log(b / a); % capacitance
+                L = u_r * u_0 * log(b / a) / (2 * pi); % inductance
+                R = (1 / (2 * pi)) * ((1 / a) +(1 / b)) * sqrt(pi * f * u_0 / sigma_c); % resistance
+                u_r = C / sqrt(e_r);
+                beta = w * sqrt(L * C); % phase constant
+                gamma = j * beta; % propagation constant
+                z_0 = sqrt(L / C); % characteristic impedance
+                wl = 2 * pi / beta; % wavelength
+                u_p = w / beta; % propagation velocity
+                % p_avg = 0; % look at lecture slides
+
+                % display
+                disp(['beta = ', num2str(beta), ' rad/m'])
+                disp(['Z_0 = ', num2str(z_0), ' Ohms'])
+                disp(['Reflection coefficient = ', num2str(reflect)])
+                disp(['Z_in = ', num2str(z_in), ' Ohms'])
+                disp(['V_in = ', num2str(v_in), ' V'])
+                disp(['V_L = ', num2str(v_l), ' V'])
+                disp(['G_db = ', num2str(G_dB), ' dB'])
+
+            else
+                disp('You will have to restart the program.');
+                return;
+            end
+        end 
 
     else
         disp('You will have to restart the program.');
