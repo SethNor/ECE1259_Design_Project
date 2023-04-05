@@ -167,7 +167,7 @@ switch conductor
         end
     case 15
         sigma_c = input('Please enter a value for the conductor permiability in S/m: ');
-        disp('You chose Other with a permiability of ', num2str(sigma_c));
+        disp(['You chose Other with a permiability of ', num2str(sigma_c)]);
         correct=input('Is this correct? [Y or N]: ','s');
         if correct ~= 'Y' && correct ~= 'y'
             disp('You will have to restart the program.');
@@ -324,8 +324,8 @@ switch dielectric
         Ebr = input('Please enter a value for the Electric field breakdown in V/m: ');
         tan_d = input('Please enter a value for the tangent of the dielectric phase at 1MHz: ');
         sigma_d = input('Please enter a value for the permiability of the dielectric in S/m: ');
-        disp('You chose Other with a relative permitivity of ', num2str(e_r), ',\na Electric field breakdown of ',num2str(Ebr), ...
-            ',\na tangent of the dielectric phase of ', num2str(tan_d), ',\nand a permiability of ', num2str(sigma_d), '.');
+        fprintf(['You chose Other with a relative permitivity of ', num2str(e_r), ', an Electric field breakdown of ',num2str(Ebr), ...
+            ',\na tangent of the dielectric phase of ', num2str(tan_d), ', and a permiability of ', num2str(sigma_d), '.\n']);
         correct = input('Is this correct? [Y or N]: ','s');
         if correct ~= 'Y' && correct ~= 'y'
             disp('You will have to restart the program.');
@@ -368,6 +368,7 @@ if choice_loss == 1 % system is LOSSY
             fprintf('----------------------------------------------------\n\n')
             disp('The system has a load!')
             check_load = input('Is this correct? [Y or N]: ', "s"); % confirm with user of choice
+            fprintf('----------------------------------------------------\n\n')
         
             if check_load == "y" || check_load == "Y"
                 w = 2 * pi * f; % angular freq
@@ -401,6 +402,11 @@ if choice_loss == 1 % system is LOSSY
                 disp(['V_in = ', num2str(v_in), ' V'])
                 disp(['V_L = ', num2str(v_l), ' V'])
                 disp(['G_db = ', num2str(G_dB), ' dB'])
+                % display the frequency response
+                sys=tf([C*l 1], [R*C*l 1]);
+                bode(sys)
+                
+
                 %display the frequency response
                 sys=tf([C*l 1], [R*C*l 1]);
                 bode(sys)
@@ -416,6 +422,7 @@ if choice_loss == 1 % system is LOSSY
             fprintf('----------------------------------------------------\n\n')
             disp('The system does not have a load!')
             check_load = input('Is this correct? [Y or N]: ', "s"); % confirm with user of choice
+            fprintf('----------------------------------------------------\n\n')
 
             if check_load == "y" || check_load == "Y"
                 w = 2 * pi * f; % angular freq
@@ -437,7 +444,7 @@ if choice_loss == 1 % system is LOSSY
                 disp(['beta = ', num2str(beta), ' rad/m'])
                 disp(['Z_0 = ', num2str(z_0), ' Ohms'])
                 disp(['G_db = ', num2str(G_dB), ' dB'])
-                %display the frequency response
+                % display the frequency response
                 sys=tf([C*l 1], [R*C*l 1]);
                 bode(sys)
 
@@ -468,6 +475,7 @@ if choice_loss == 2 % system is LOSSLESS
             fprintf('----------------------------------------------------\n\n')
             disp('The system has a load!')
             check_load = input('Is this correct? [Y or N]: ', "s"); % confirm with user of choice
+            fprintf('----------------------------------------------------\n\n')
         
             if check_load == "y" || check_load == "Y"
                 w = 2 * pi * f; % angular freq
@@ -491,14 +499,15 @@ if choice_loss == 2 % system is LOSSLESS
                 VSWR = (1 + abs(reflect)) / (1 - abs(reflect)); % voltage standing wave ratio
 
                 % display
-                disp(['beta = ', num2str(beta), ' rad/m'])
+                disp(['gamma = ', num2str(gamma), ' rad/m'])
                 disp(['Z_0 = ', num2str(z_0), ' Ohms'])
                 disp(['Reflection coefficient = ', num2str(reflect)])
                 disp(['VSWR = ', num2str(VSWR)])
                 disp(['Z_in = ', num2str(z_in), ' Ohms'])
                 disp(['V_in = ', num2str(v_in), ' V'])
                 disp(['V_L = ', num2str(v_l), ' V'])
-                %display the frequency response
+
+                % display the frequency response
                 sys=tf([C*l 1], [R*C*l 1]);
                 bode(sys)
 
@@ -513,6 +522,7 @@ if choice_loss == 2 % system is LOSSLESS
             fprintf('----------------------------------------------------\n\n')
             disp('The system does not have a load!')
             check_load = input('Is this correct? [Y or N]: ', "s"); % confirm with user of choice
+            fprintf('----------------------------------------------------\n\n')
 
             if check_load == "y" || check_load == "Y"
                 w = 2 * pi * f; % angular freq
@@ -528,9 +538,9 @@ if choice_loss == 2 % system is LOSSLESS
                 u_p = w / beta; % propagation velocity
 
                 % display
-                disp(['beta = ', num2str(beta), ' rad/m'])
+                disp(['gamma = ', num2str(gamma), ' rad/m'])
                 disp(['Z_0 = ', num2str(z_0), ' Ohms'])
-                %display the frequency response
+                % display the frequency response
                 sys=tf([C*l 1], [R*C*l 1]);
                 bode(sys)
 
