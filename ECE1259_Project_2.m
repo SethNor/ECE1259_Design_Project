@@ -400,6 +400,9 @@ if choice_loss == 1 % system is LOSSY
                 disp(['V_in = ', num2str(v_in), ' V'])
                 disp(['V_L = ', num2str(v_l), ' V'])
                 disp(['G_db = ', num2str(G_dB), ' dB'])
+                %display the frequency response
+                sys=tf([C*l 1], [R*C*l 1]);
+                bode(sys)
             else
                 disp('You will have to restart the program.');
                 return;
@@ -539,6 +542,9 @@ if choice_loss == 2 % system is LOSSLESS
                 disp(['V_in = ', num2str(v_in), ' V'])
                 disp(['V_L = ', num2str(v_l), ' V'])
                 disp(['G_db = ', num2str(G_dB), ' dB'])
+                %display the frequency response
+                sys=tf([C*l 1], [R*C*l 1]);
+                bode(sys)
 
             else
                 disp('You will have to restart the program.');
