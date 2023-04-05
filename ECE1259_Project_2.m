@@ -329,17 +329,13 @@ switch dielectric
             return;
         end
 end
-        
-    % somehow make a struct of all the materials to grab data from to find
-    % information about conductivity, permitivitty, 
+      
 % asks the user to enter several design requirements
 a = input('Please enter a value for the inner radius in mm: ');
 b = input('Please enter a value for the outer radius in mm: ');
 f = input('Please enter a value for the operating frequency in Hz: ');
 l = input('Please enter the length in m: ');
 v = input('Please enter the operating voltage in V: '); % IS IT USUAL TO KNOW THIS
-%mat_d = input('Please enter the type of material for the dielectric: ', "s");
-%mat_c = input('Please enter the type of material for the conductor: ', "s");
 
 %% outputs - lossy
 w = 2 * pi * f; % angular freq
@@ -348,6 +344,7 @@ G = 2 * pi * sigma_d / log(b / a); % conductance
 C = 2 * pi * e_r * e_0 / log(b / a); % capacitance
 L = u_r * u_0 * log(b / a) / (2 * pi); % inductance
 R = (1 / (2 * pi)) * ((1 / a) +(1 / b)) * sqrt(pi * f * u_0 / sigma_c); % resistance
+u_r = C / sqrt(e_r);
 gamma = sqrt((R + j * w * L) * (G + j * w * C)); % propagation constant
 z_0 = (R + j * w * L) / gamma; % characteristic impednace 
 alpha = real(gamma); % attenuation constant
@@ -371,6 +368,7 @@ G = 2 * pi * sigma_d / log(b / a); % conductance
 C = 2 * pi * e_r * e_0 / log(b / a); % capacitance
 L = u_r * u_0 * log(b / a) / (2 * pi); % inductance
 R = (1 / (2 * pi)) * ((1 / a) +(1 / b)) * sqrt(pi * f * u_0 / sigma_c); % resistance
+u_r = C / sqrt(e_r);
 beta = w * sqrt(L * C); % phase constant
 gamma = j * beta; % propagation constant
 z_0 = sqrt(L / C); % characteristic impedance
@@ -416,7 +414,7 @@ if choice_load_check == 1 % there IS a load
 end
 
 if choice_load_check == 2 % there ISNT a load 
-    disp('The system doesnt have a load! Is this correct?')
+    disp('The system does not have a load! Is this correct?')
     check = input('Enter yes or no: ', "s"); % confirm with user of choice
 
     if check == "yes" || check == "Yes"
