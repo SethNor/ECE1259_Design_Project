@@ -73,7 +73,6 @@ switch conductor
         if correct ~= 'Y' && correct ~= 'y'
             disp('You will have to restart the program.');
             return;
-        else
         end
     case 2
         sigma_c = Car;
@@ -334,6 +333,7 @@ end
 a = input('Please enter a value for the inner radius in mm: ');
 b = input('Please enter a value for the outer radius in mm: ');
 f = input('Please enter a value for the operating frequency in Hz: ');
+%%need to do frequency response 
 l = input('Please enter the length in m: ');
 v = input('Please enter the operating voltage in V: '); % IS IT USUAL TO KNOW THIS
 
