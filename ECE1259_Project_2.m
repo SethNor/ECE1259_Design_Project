@@ -219,6 +219,13 @@ end
 incorrect = true;
 fprintf('----------------------------------------------------\n\n')
 a = input('Please enter a value for the inner radius in mm: ');
+
+%Replace with Warning instead 
+%Make outer Diameter to Dielectric thickness and calcualte outer Diameter
+%Have fixed values for Tickness, Length, and Voltage and give that info
+%%when used
+
+
 while incorrect
     b = input('Please enter a value for the outer radius in mm: ');
     if b > a
