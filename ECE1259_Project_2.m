@@ -16,6 +16,7 @@ h = 6.626e-34; % planks constant in Js
 u_0 = pi*4e-7; % permeability constant in H/m
 e_0 = 8.854e-12; % permitivitty constant F/m
 c = 3e8; % speed of light in m/s
+sweep = 1:1000000;
 
 % grab these from the material data
 sigma_d = 0;
@@ -69,110 +70,50 @@ conductor = menu('What conductor are you using?', 'Aluminum', 'Carbon', 'Copper'
 switch conductor
     case 1
         sigma_c = Al;
-        correct=input('You chose Aluminim is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 2
         sigma_c = Car;
-        correct=input('You chose Carbon is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 3
         sigma_c = Cu;
-        correct=input('You chose Copper is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+       
     case 4
         sigma_c = Au;
-        correct=input('You chose Gold is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 5
         sigma_c = Gr;
-        correct=input('You chose Graphite is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 6
         sigma_c = Fe;
-        correct=input('You chose Iron is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+       
     case 7
         sigma_c = Pb;
-        correct=input('You chose Lead is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 8
         sigma_c = Nich;
-        correct=input('You chose Nichrome is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 9 
         sigma_c = Ni;
-        correct=input('You chose Nickel is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 10
         sigma_c = Ag;
-        correct=input('You chose Silver is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 11
         sigma_c = Sol;
-        correct=input('You chose Solder is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 12
         sigma_c = Stain;
-        correct=input('You chose Stainless Steel is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 13
         sigma_c = Sn;
-        correct=input('You chose Tin is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 14 
         sigma_c = W;
-        correct=input('You chose Tungsten is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 15
         sigma_c = input('Please enter a value for the conductor permiability in S/m: ');
         disp(['You chose Other with a permiability of ', num2str(sigma_c)]);
-        correct=input('Is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
 end
 
 %Menu for the dielectric from list or given values.
@@ -186,139 +127,84 @@ switch dielectric
         Ebr = Air(2);
         tan_d = Air(3);
         sigma_d = Air(4);
-        correct=input('You chose Air is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 2
         e_r = Alum(1);
         Ebr = Alum(2);
         tan_d = Alum(3);
-        sigma_d = Alum(4);correct=input('You chose Alumina is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        sigma_d = Alum(4);
     case 3
         e_r = Bar(1);
         Ebr = Bar(2);
         tan_d = Bar(3);
         sigma_d = Bar(4);
-        correct=input('You chose Barium Titanate is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 4
         e_r = Glass(1);
         Ebr = Glass(2);
         tan_d = Glass(3);
         sigma_d = Glass(4); 
-        correct=input('You chose Glass is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+       
     case 5
         e_r = Ice(1);
         Ebr = Ice(2);
         tan_d = Ice(3);
         sigma_d = Ice(4); 
-        correct=input('You chose Ice is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 6
         e_r = Mica(1);
         Ebr = Mica(2);
         tan_d = Mica(3);
         sigma_d = Mica(4); 
-        correct=input('You chose Mica is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 7
         e_r = Poleth(1);
         Ebr = Poleth(2);
         tan_d = Poleth(3);
         sigma_d = Poleth(4); 
-        correct=input('You chose Polyethylene is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 8 
         e_r = Polsty(1);
         Ebr = Polsty(2);
         tan_d = Polsty(3);
-        sigma_d = Polsty(4); correct=input('You chose Polystyrene is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        sigma_d = Polsty(4); 
+        
     case 9
         e_r = Quartz(1);
         Ebr = Quartz(2);
         tan_d = Quartz(3);
         sigma_d = Quartz(4); 
-        correct=input('You chose Quartz (fused) is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 10
         e_r = Si(1);
         Ebr = Si(2);
         tan_d = Si(3);
         sigma_d = Si(4); 
-        correct=input('You chose Silicon (pure) is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 11
         e_r = Soil(1);
         Ebr = Soil(2);
         tan_d = Soil(3);
         sigma_d = Soil(4); 
-        correct=input('You chose Soil (dry) is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 12
         e_r = Teflon(1);
         Ebr = Teflon(2);
         tan_d = Teflon(3);
         sigma_d = Teflon(4); 
-        correct=input('You chose Teflon is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 13
         e_r = Water(1);
         Ebr = Water(2);
         tan_d = Water(3);
         sigma_d = Water(4); 
-        correct=input('You chose Water (distilled) is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 14
         e_r = Seawater(1);
         Ebr = Seawater(2);
         tan_d = Seawater(3);
         sigma_d = Seawater(4); 
-        correct=input('You chose Seawater is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
     case 15
         e_r = input('Please enter a value for the relative permitivity of the dielectric: ');
         Ebr = input('Please enter a value for the Electric field breakdown in V/m: ');
@@ -326,26 +212,38 @@ switch dielectric
         sigma_d = input('Please enter a value for the permiability of the dielectric in S/m: ');
         fprintf(['You chose Other with a relative permitivity of ', num2str(e_r), ', an Electric field breakdown of ',num2str(Ebr), ...
             ',\na tangent of the dielectric phase of ', num2str(tan_d), ', and a permiability of ', num2str(sigma_d), '.\n']);
-        correct = input('Is this correct? [Y or N]: ','s');
-        if correct ~= 'Y' && correct ~= 'y'
-            disp('You will have to restart the program.');
-            return;
-        end
+        
 end
       
 %% asks the user to enter several design requirements
+incorrect = true;
 fprintf('----------------------------------------------------\n\n')
 a = input('Please enter a value for the inner radius in mm: ');
-b = input('Please enter a value for the outer radius in mm: ');
-if b <= a
-    disp('Error, outer radius must be bigger than the inner radius.')
-    return
-end 
+while incorrect
+    b = input('Please enter a value for the outer radius in mm: ');
+    if b > a
+        incorrect = false;
+       break
+    end 
+     disp('Error, outer radius must be bigger than the inner radius.');
+end
 f = input('Please enter a value for the operating frequency in Hz: ');
-z_l = input('Please enter a value for the load impedance in Ohms: ');
 z_s = 0; % source impedance is assumed to be 0
-l = input('Please enter the length in m: ');
-v_s = input('Please enter the operating voltage in V: ');
+while true
+    l = input('Please enter the length in m: ');
+    if l > 0
+        break
+    end
+    disp('Error, Lenght needs to be greater than 0.')
+end
+while true
+    v_s = input('Please enter the operating voltage in V: ');
+    if v_s ~= 0
+        break
+    end
+    disp('Error, input voltage can not be 0.')
+end
+
 fprintf('----------------------------------------------------\n\n')
 
 %% lossy or lossless system
@@ -367,19 +265,24 @@ if choice_loss == 1 % system is LOSSY
         if choice_load_check == 1 % there IS a load 
             fprintf('----------------------------------------------------\n\n')
             disp('The system has a load!')
+            z_l = input('Please enter a value for the load impedance in Ohms: ');
             check_load = input('Is this correct? [Y or N]: ', "s"); % confirm with user of choice
             fprintf('----------------------------------------------------\n\n')
         
             if check_load == "y" || check_load == "Y"
                 w = 2 * pi * f; % angular freq
+                omega = 2 * pi .* sweep;
                 j = sqrt(-1); % imaginary number
                 G = 2 * pi * sigma_d / log(b / a); % conductance
                 C = 2 * pi * e_r * e_0 / log(b / a); % capacitance
                 L = u_r * u_0 * log(b / a) / (2 * pi); % inductance
                 R = (1 / (2 * pi)) * ((1 / a) +(1 / b)) * sqrt(pi * f * u_0 / sigma_c); % resistance
+                R_sweep = (1 / (2 * pi)) * ((1 / a) +(1 / b)) * sqrt(pi .* sweep * u_0 / sigma_c);
                 gamma = sqrt((R + j * w * L) * (G + j * w * C)); % propagation constant
+                gamma_sweep = sqrt((R_sweep + j .* omega .* L) .* (G + j .* omega .* C));
                 z_0 = (R + j * w * L) / gamma; % characteristic impednace 
                 alpha = real(gamma); % attenuation constant
+                Asweep = real(gamma_sweep);
                 beta = imag(gamma); % phase constant
                 wl = 2 * pi / beta; % wavelength
                 u_p = w / beta; % propagation velocity
@@ -402,14 +305,17 @@ if choice_loss == 1 % system is LOSSY
                 disp(['V_in = ', num2str(v_in), ' V'])
                 disp(['V_L = ', num2str(v_l), ' V'])
                 disp(['G_db = ', num2str(G_dB), ' dB'])
-                % display the frequency response
-                sys=tf([C*l 1], [R*C*l 1]);
-                bode(sys)
-                
 
                 %display the frequency response
                 sys=tf([C*l 1], [R*C*l 1]);
                 bode(sys)
+                
+                %display the frequency sweep
+                figure(2);
+                plot(sweep, Asweep);
+                title('Attenuation vs. Frequency');
+                xlabel('Frequency (Hz)');
+                ylabel('Attenuation (Np/m)');
 
             else
                 disp('You will have to restart the program.');
@@ -434,6 +340,10 @@ if choice_loss == 1 % system is LOSSY
                 gamma = sqrt((R + j * w * L) * (G + j * w * C)); % propagation constant
                 z_0 = (R + j * w * L) / gamma; % characteristic impednace 
                 alpha = real(gamma); % attenuation constant
+                omega = 2 * pi .* sweep;
+                R_sweep = (1 / (2 * pi)) * ((1 / a) +(1 / b)) * sqrt(pi .* sweep * u_0 / sigma_c);
+                gamma_sweep = sqrt((R_sweep + j .* omega .* L) .* (G + j .* omega .* C));
+                Asweep = real(gamma_sweep);
                 beta = imag(gamma); % phase constant
                 wl = 2 * pi / beta; % wavelength
                 u_p = w / beta; % propagation velocity
@@ -444,9 +354,17 @@ if choice_loss == 1 % system is LOSSY
                 disp(['beta = ', num2str(beta), ' rad/m'])
                 disp(['Z_0 = ', num2str(z_0), ' Ohms'])
                 disp(['G_db = ', num2str(G_dB), ' dB'])
+                
                 % display the frequency response
                 sys=tf([C*l 1], [R*C*l 1]);
                 bode(sys)
+                
+                %display the frequency sweep
+                figure(2);
+                plot(sweep, Asweep);
+                title('Attenuation vs. Frequency');
+                xlabel('Frequency (Hz)');
+                ylabel('Attenuation (Np/m)');
 
             else
                 disp('You will have to restart the program.');
@@ -474,6 +392,7 @@ if choice_loss == 2 % system is LOSSLESS
         if choice_load_check == 1 % there IS a load 
             fprintf('----------------------------------------------------\n\n')
             disp('The system has a load!')
+            z_l = input('Please enter a value for the load impedance in Ohms: ');
             check_load = input('Is this correct? [Y or N]: ', "s"); % confirm with user of choice
             fprintf('----------------------------------------------------\n\n')
         
@@ -486,6 +405,10 @@ if choice_loss == 2 % system is LOSSLESS
                 R = (1 / (2 * pi)) * ((1 / a) +(1 / b)) * sqrt(pi * f * u_0 / sigma_c); % resistance
                 beta = w * sqrt(L * C); % phase constant
                 gamma = j * beta; % propagation constant
+                omega = 2 * pi .* sweep;
+                R_sweep = (1 / (2 * pi)) * ((1 / a) +(1 / b)) * sqrt(pi .* sweep * u_0 / sigma_c);
+                gamma_sweep = sqrt((R_sweep + j .* omega .* L) .* (G + j .* omega .* C));
+                Asweep = real(gamma_sweep);
                 z_0 = sqrt(L / C); % characteristic impedance
                 wl = 2 * pi / beta; % wavelength
                 u_p = w / beta; % propagation velocity
@@ -510,7 +433,14 @@ if choice_loss == 2 % system is LOSSLESS
                 % display the frequency response
                 sys=tf([C*l 1], [R*C*l 1]);
                 bode(sys)
-
+                
+                %display the frequency sweep
+                figure(2);
+                plot(sweep, Asweep);
+                title('Attenuation vs. Frequency');
+                xlabel('Frequency (Hz)');
+                ylabel('Attenuation (Np/m)');
+                
             else
                 disp('You will have to restart the program.');
                 return;
@@ -533,6 +463,10 @@ if choice_loss == 2 % system is LOSSLESS
                 R = (1 / (2 * pi)) * ((1 / a) +(1 / b)) * sqrt(pi * f * u_0 / sigma_c); % resistance
                 beta = w * sqrt(L * C); % phase constant
                 gamma = j * beta; % propagation constant
+                omega = 2 * pi .* sweep;
+                R_sweep = (1 / (2 * pi)) * ((1 / a) +(1 / b)) * sqrt(pi .* sweep * u_0 / sigma_c);
+                gamma_sweep = sqrt((R_sweep + j .* omega .* L) .* (G + j .* omega .* C));
+                Asweep = real(gamma_sweep);
                 z_0 = sqrt(L / C); % characteristic impedance
                 wl = 2 * pi / beta; % wavelength
                 u_p = w / beta; % propagation velocity
@@ -543,6 +477,13 @@ if choice_loss == 2 % system is LOSSLESS
                 % display the frequency response
                 sys=tf([C*l 1], [R*C*l 1]);
                 bode(sys)
+                
+                %display the frequency sweep
+                figure(2);
+                plot(sweep, Asweep);
+                title('Attenuation vs. Frequency');
+                xlabel('Frequency (Hz)');
+                ylabel('Attenuation (Np/m)');
 
             else
                 disp('You will have to restart the program.');
