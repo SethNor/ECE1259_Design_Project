@@ -112,6 +112,10 @@ switch conductor
         
     case 15
         sigma_c = input('Please enter a value for the conductor permiability in S/m: ');
+        if sigma_c <=0
+            warning('Error, conductor permiability must be greater than zero. Setting conductor permiability to that of Copper.')
+            sigma_c = Cu;
+        end
         disp(['You chose Other with a permiability of ', num2str(sigma_c)]);
         
 end
@@ -207,9 +211,25 @@ switch dielectric
         
     case 15
         e_r = input('Please enter a value for the relative permitivity of the dielectric: ');
+         if e_r <=0
+            warning('Error, relative permitivity must be greater than zero. Setting realitive permitivity to that of Barium Titanate.')
+            e_r = Bar(1);
+        end
         Ebr = input('Please enter a value for the Electric field breakdown in V/m: ');
+         if Ebr <=0
+            warning('Error, Electric field breakdown must be greater than zero. Setting Electric field breakdown to that of Barium Titanate.')
+            Ebr = Bar(2);
+        end
         tan_d = input('Please enter a value for the tangent of the dielectric phase at 1MHz: ');
+         if tan_d <=0
+            warning('Error, tangent of the dielectric phase must be greater than zero. Setting tangent of the dielectric phase to that of Barium Titanate.')
+            tan_d = Bar(3);
+        end
         sigma_d = input('Please enter a value for the permiability of the dielectric in S/m: ');
+         if sigma_d <=0
+            warning('Error, permiability of the dielectric must be greater than zero. Setting permiability of the dielectric to that of Barium Titanate.')
+            sigma_d = Bar(4);
+        end
         fprintf(['You chose Other with a relative permitivity of ', num2str(e_r), ', an Electric field breakdown of ',num2str(Ebr), ...
             ',\na tangent of the dielectric phase of ', num2str(tan_d), ', and a permiability of ', num2str(sigma_d), '.\n']);
         
@@ -219,36 +239,32 @@ end
 incorrect = true;
 fprintf('----------------------------------------------------\n\n')
 a = input('Please enter a value for the inner radius in mm: ');
-
-%Replace with Warning instead 
-%Make outer Diameter to Dielectric thickness and calcualte outer Diameter
-%Have fixed values for Tickness, Length, and Voltage and give that info
-%%when used
-
-
-while incorrect
-    b = input('Please enter a value for the outer radius in mm: ');
-    if b > a
-        incorrect = false;
-       break
-    end 
-     disp('Error, outer radius must be bigger than the inner radius.');
+if a <= 0 
+    warning('Error, inner radius must be greater than zero. Setting inner radius to 5mm.')
+    a = 5;
+end
+ox = input('Please enter a value for the oxide thickness in mm: ');
+if ox > 0
+    b = ox + a;
+else
+    warning('Error, oxide thickness must be greater than zero. Setting Oxide thickness to 2x the inner radius.');
+    b = 2 * a;
 end
 f = input('Please enter a value for the operating frequency in Hz: ');
-z_s = 0; % source impedance is assumed to be 0
-while true
-    l = input('Please enter the length in m: ');
-    if l > 0
-        break
-    end
-    disp('Error, Lenght needs to be greater than 0.')
+if f <=0
+    warning('Error, Operating frequency must be greater than zero. Setting Operating frequency to 1000 Hz.')
+    f = 1000;
 end
-while true
-    v_s = input('Please enter the operating voltage in V: ');
-    if v_s ~= 0
-        break
-    end
-    disp('Error, input voltage can not be 0.')
+z_s = 0; % source impedance is assumed to be 0
+l = input('Please enter the length in m: ');
+if l <= 0
+    warning('Error, Lenght needs to be greater than 0. Setting length to 100m')
+    l = 100;
+end
+v_s = input('Please enter the operating voltage in V: ');
+if v_s == 0
+    warning('Error, input voltage can not be 0. Setting input voltage to 10V')
+    v_s = 10;
 end
 
 fprintf('----------------------------------------------------\n\n')
@@ -271,6 +287,10 @@ if choice_loss == 1 % system is LOSSY
         fprintf('----------------------------------------------------\n\n')
         disp('The system has a load!')
         z_l = input('Please enter a value for the load impedance in Ohms: ');
+        if z_l <=0
+            warning('Error, load impedance must be greater than zero. Setting input impedance to 100 Ohms.')
+            z_l = 100;
+        end
         fprintf('----------------------------------------------------\n\n')
     
         w = 2 * pi * f; % angular freq
@@ -375,6 +395,10 @@ if choice_loss == 2 % system is LOSSLESS
         fprintf('----------------------------------------------------\n\n')
         disp('The system has a load!')
         z_l = input('Please enter a value for the load impedance in Ohms: ');
+        if z_l <=0
+            warning('Error, load impedance must be greater than zero. Setting input impedance to 100 Ohms.')
+            z_l = 100;
+        end
         fprintf('----------------------------------------------------\n\n')
     
         w = 2 * pi * f; % angular freq
